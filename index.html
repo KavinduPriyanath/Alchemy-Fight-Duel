@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111327">
+  <meta name="description" content="Alchemy Fight: a turn-based elemental card duel against an AI rival.">
+  <title>Alchemy Fight</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">✦</span><div><span class="eyebrow">ELEMENTAL DUEL</span><h1>ALCHEMY <em>FIGHT</em></h1></div></div>
+      <button class="icon-button" id="helpButton" aria-label="How to play">?</button>
+    </header>
+
+    <section class="board" aria-label="Duel arena">
+      <div class="arena-glow"></div><div class="window"><div class="window-ribs"></div></div>
+      <div class="pillar pillar-left"></div><div class="pillar pillar-right"></div>
+      <div class="torch torch-left">🔥</div><div class="torch torch-right">🔥</div>
+      <div class="hud hud-player"><div class="hud-avatar">🧙</div><div class="hud-info"><span>YOU</span><strong>❤️ <b id="playerHp">100</b></strong><div class="hp-track"><i id="playerHpBar"></i></div></div></div>
+      <div class="turn-badge"><small id="turnLabel">TURN 1</small><strong id="phaseLabel">YOUR TURN</strong></div>
+      <div class="hud hud-ai"><div class="hud-info"><span>RIVAL</span><strong>❤️ <b id="aiHp">100</b></strong><div class="hp-track"><i id="aiHpBar"></i></div></div><div class="hud-avatar">👹</div></div>
+
+      <div class="battlefield" id="battlefield">
+        <div class="view-world" id="viewWorld">
+        <div class="enemy-aura"></div>
+        <svg class="rival-art" viewBox="0 0 260 285" aria-hidden="true"><defs><linearGradient id="cloak" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#51417e"/><stop offset=".5" stop-color="#251b41"/><stop offset="1" stop-color="#120f29"/></linearGradient><radialGradient id="orb"><stop stop-color="#fff"/><stop offset=".28" stop-color="#efb7ff"/><stop offset=".6" stop-color="#b14cff"/><stop offset="1" stop-color="#6421ce"/></radialGradient></defs><ellipse cx="130" cy="263" rx="91" ry="14" fill="#a369eb" opacity=".35"/><path d="M107 47Q130 9 153 47L185 94 210 230Q130 274 50 230L75 94Z" fill="url(#cloak)" stroke="#8064b7" stroke-width="4"/><path d="M91 88Q130 27 169 88L180 135Q130 169 80 135Z" fill="#171225" stroke="#8f73b5" stroke-width="3"/><path d="M99 111l23 8-17 7zM161 111l-23 8 17 7z" fill="#ff793f" stroke="#ffb47e" stroke-width="3"/><path d="M118 141q12 7 24 0" fill="none" stroke="#d6b1e8" stroke-width="3"/><path d="M62 174q21-30 48 4l-5 24-34 3zM198 174q-21-30-48 4l5 24 34 3z" fill="#31204d" stroke="#9874c2" stroke-width="4"/><circle cx="130" cy="180" r="27" fill="url(#orb)" stroke="#e7a7ff" stroke-width="5"/><circle cx="130" cy="180" r="12" fill="none" stroke="#fff" stroke-width="3" opacity=".7"/><path d="M79 145l-20 67M181 145l20 67" stroke="#b37ac3" stroke-width="3" opacity=".7"/></svg>
+        <div class="ai-units units-row" id="aiUnits"></div>
+        <div class="target-burst" id="targetBurst"></div>
+        <div class="lanes" id="lanes"><button class="lane" data-lane="0" aria-label="Summon in left lane"><span>LEFT</span><b>＋</b></button><button class="lane" data-lane="1" aria-label="Summon in middle lane"><span>MIDDLE</span><b>＋</b></button><button class="lane" data-lane="2" aria-label="Summon in right lane"><span>RIGHT</span><b>＋</b></button></div>
+        <div class="player-units units-row" id="playerUnits"></div>
+        <div class="floor-ring ring-outer"></div><div class="floor-ring ring-inner"></div>
+        </div>
+        <div class="aim-reticle" id="aimReticle"><i></i><span id="aimTarget">AIM</span></div>
+        <div class="casting-hands" id="castingHands"><div class="hand-wrap hand-wrap-left"><span class="hand-element" id="leftElement"></span><span class="hand hand-left">✋</span></div><span class="countdown orb-countdown" id="countdown"></span><div class="effect-orb" id="effectOrb">✦</div><div class="hand-wrap hand-wrap-right"><span class="hand-element" id="rightElement"></span><span class="hand hand-right">🖐️</span></div></div>
+        <div class="aim-line" id="aimLine"></div>
+        <div class="cast-instruction" id="castInstruction">Choose three cards to weave a spell</div>
+      </div>
+      <div class="event-toast" id="eventToast" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="control-panel" aria-label="Your cards and actions">
+      <div class="spell-bar"><span class="section-label">ALCHEMY SLOTS</span><div class="slots" id="slots"></div><div class="spell-result"><span class="spell-icon" id="spellIcon">✧</span><div><small>ACTIVE EFFECT</small><strong id="spellName">Select your elements</strong><span id="spellDetail">Fill all 3 slots to begin casting</span></div></div></div>
+      <div class="mana-row"><span class="mana-label">🧪 MANA <strong id="manaText">6 / 6</strong></span><div class="mana-pips" id="manaPips"></div><button class="end-button" id="endTurnButton">END TURN <span>➜</span></button></div>
+      <div class="tray-header"><span class="section-label">YOUR HAND</span><span id="deckText">Deck ready</span></div>
+      <div class="card-tray" id="cardTray"></div>
+      <div class="footer-note">Tap cards to combine • Hold and drag to look around • Release to cast</div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="startModal"><div class="modal"><div class="modal-sigil">✦</div><div class="modal-kicker">WELCOME TO THE ARENA</div><h2>ALCHEMY<br><em>FIGHT</em></h2><p>Weave three elements, aim your magic, and outlast the rival alchemist.</p><div class="difficulty-title">CHOOSE YOUR RIVAL</div><div class="difficulty-options"><button class="difficulty" data-difficulty="easy"><strong>Easy</strong><span>A gentle first duel</span></button><button class="difficulty selected" data-difficulty="normal"><strong>Normal</strong><span>A balanced challenge</span></button><button class="difficulty" data-difficulty="hard"><strong>Hard</strong><span>A cunning alchemist</span></button></div><button class="primary-button" id="startButton">ENTER THE ARENA <span>➜</span></button></div></div>
+  <div class="modal-backdrop hidden" id="endModal"><div class="modal"><div class="modal-sigil" id="endSigil">✦</div><div class="modal-kicker">THE DUEL IS OVER</div><h2 id="endTitle">VICTORY</h2><p id="endMessage"></p><button class="primary-button" id="playAgainButton">PLAY AGAIN <span>↻</span></button></div></div>
+  <div class="modal-backdrop hidden" id="helpModal"><div class="modal help-modal"><button class="modal-close" id="closeHelp" aria-label="Close">×</button><div class="modal-kicker">HOW TO PLAY</div><h2>MASTER THE <em>ELEMENTS</em></h2><ol><li>Tap cards to fill the three alchemy slots. Each card spends mana. The first two elements appear in your hands; the third mixes into a spell ball.</li><li>Once filled, you have five seconds to change your selection. Tap × on a slot to return a card and its mana.</li><li>After the lock, hold and drag anywhere in the arena to look around. Center the reticle on the rival or a highlighted summon tile, then release to cast.</li><li>Use End Turn to let your units march and the rival act. Reduce the rival to 0 health to win.</li></ol><p>Elemental reactions: Fire + Water = Vaporize (1.5×); Water + Lightning = Electrocharge (1.5×); Fire + Poison = Combustion (1.6×); Earth + Wind = Shatter (1.35×); Water + Wind = Freeze (1.2× and skips a unit action); Fire + Earth = Molten (1.3×). Fire burns for 2 and Poison deals 3 damage on each of the next two turns. Your first card sets the attack element.</p><button class="primary-button" id="helpDone">GOT IT</button></div></div>
+  <script src="reactions.js"></script><script src="game.js"></script><script type="module" src="arena3d.js"></script>
+</body>
+</html>
+
